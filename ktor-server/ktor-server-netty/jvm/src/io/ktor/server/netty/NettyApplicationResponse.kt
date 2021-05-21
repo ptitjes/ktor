@@ -15,9 +15,6 @@ import io.netty.handler.codec.http.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
-@Suppress("KDocMissingDocumentation")
-@InternalAPI
-@OptIn(EngineAPI::class)
 public abstract class NettyApplicationResponse(
     call: NettyApplicationCall,
     protected val context: ChannelHandlerContext,
@@ -76,20 +73,20 @@ public abstract class NettyApplicationResponse(
     protected open fun responseMessage(chunked: Boolean, data: ByteArray): Any = responseMessage(chunked, true)
 
     internal fun sendResponse(chunked: Boolean = true, content: ByteReadChannel) {
-        if (!responseMessageSent) {
-            responseChannel = content
-            responseMessage.complete(
-                when {
-                    content.isClosedForRead -> {
-                        responseMessage(chunked = false, data = EmptyByteArray)
-                    }
-                    else -> {
-                        responseMessage(chunked, last = false)
-                    }
+        if (responseMessageSent) return
+
+        responseChannel = content
+        responseMessage.complete(
+            when {
+                content.isClosedForRead -> {
+                    responseMessage(chunked = false, data = EmptyByteArray)
                 }
-            )
-            responseMessageSent = true
-        }
+                else -> {
+                    responseMessage(chunked, last = false)
+                }
+            }
+        )
+        responseMessageSent = true
     }
 
     internal fun ensureResponseSent() {

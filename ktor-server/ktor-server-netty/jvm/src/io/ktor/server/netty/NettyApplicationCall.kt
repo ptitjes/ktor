@@ -12,16 +12,15 @@ import io.netty.util.*
 import kotlinx.atomicfu.*
 import kotlinx.coroutines.*
 
-@Suppress("KDocMissingDocumentation")
-@EngineAPI
-@OptIn(InternalAPI::class)
 public abstract class NettyApplicationCall(
     application: Application,
     public val context: ChannelHandlerContext,
     private val requestMessage: Any
 ) : BaseApplicationCall(application) {
 
+    @OptIn(InternalAPI::class)
     public abstract override val request: NettyApplicationRequest
+    @OptIn(InternalAPI::class)
     public abstract override val response: NettyApplicationResponse
 
     public val responseWriteJob: Job = Job()
@@ -34,6 +33,7 @@ public abstract class NettyApplicationCall(
 
     internal suspend fun finish() {
         try {
+            @OptIn(InternalAPI::class)
             response.ensureResponseSent()
         } catch (cause: Throwable) {
             finishComplete()
@@ -56,12 +56,14 @@ public abstract class NettyApplicationCall(
         }
     }
 
+    @OptIn(InternalAPI::class)
     private fun finishComplete() {
         responseWriteJob.cancel()
         request.close()
         releaseRequestMessage()
     }
 
+    @OptIn(InternalAPI::class)
     internal fun dispose() {
         response.close()
         request.close()
