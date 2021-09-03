@@ -18,6 +18,7 @@ import io.netty.handler.codec.http.*
 import kotlinx.coroutines.CancellationException
 import kotlin.coroutines.*
 
+@OptIn(InternalAPI::class)
 internal class NettyHttp1ApplicationResponse constructor(
     call: NettyApplicationCall,
     context: ChannelHandlerContext,

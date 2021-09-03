@@ -15,6 +15,8 @@ import io.netty.handler.codec.http.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
+@Suppress("KDocMissingDocumentation")
+@InternalAPI
 public abstract class NettyApplicationResponse(
     call: NettyApplicationCall,
     protected val context: ChannelHandlerContext,
