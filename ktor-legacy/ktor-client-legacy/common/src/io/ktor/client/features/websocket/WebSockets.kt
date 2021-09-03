@@ -27,7 +27,6 @@ public object WebSocketExtensionsCapability
     level = DeprecationLevel.ERROR,
     replaceWith = ReplaceWith("WebSockets", "io.ktor.client.plugins.websocket.*")
 )
-@OptIn(WebSocketInternalAPI::class)
 public class WebSockets
 
 @Deprecated(
