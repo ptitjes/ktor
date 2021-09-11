@@ -30,10 +30,10 @@ internal class DatagramSocketImpl(
     override val socketContext: Job
         get() = _context
 
-    override val localAddress: NetworkAddress
-        get() = getLocalAddress(descriptor).let { ResolvedNetworkAddress(it.address, it.port, it) }
-    override val remoteAddress: NetworkAddress
-        get() = getRemoteAddress(descriptor).let { ResolvedNetworkAddress(it.address, it.port, it) }
+    override val localAddress: SocketAddress
+        get() = getLocalAddress(descriptor).toSocketAddress()
+    override val remoteAddress: SocketAddress
+        get() = getRemoteAddress(descriptor).toSocketAddress()
 
     private val sender: SendChannel<Datagram> = DatagramSendChannel(descriptor, this)
 
@@ -113,10 +113,10 @@ internal class DatagramSocketImpl(
                 throw cause
             }
             if (count > 0) {
-                val address = clientAddress.reinterpret<sockaddr>().toSocketAddress()
+                val remoteAddress = clientAddress.reinterpret<sockaddr>().toNativeSocketAddress()
                 val datagram = Datagram(
                     buildPacket { writeFully(buffer) },
-                    ResolvedNetworkAddress(address.address, address.port, address)
+                    remoteAddress.toSocketAddress()
                 )
                 buffer.release(DefaultDatagramChunkBufferPool)
                 return datagram
