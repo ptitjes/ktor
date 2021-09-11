@@ -174,7 +174,7 @@ internal class Endpoint(
 
         try {
             repeat(connectAttempts) {
-                val address = NetworkAddress(host, port)
+                val address = InetSocketAddress(host, port)
 
                 val connect: suspend CoroutineScope.() -> Socket = {
                     connectionFactory.connect(address) {
