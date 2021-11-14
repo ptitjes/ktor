@@ -10,7 +10,7 @@ import java.nio.channels.*
 internal class SocketImpl<out S : SocketChannel>(
     override val channel: S,
     selector: SelectorManager,
-    socketOptions: SocketOptions.TCPClientSocketOptions? = null
+    socketOptions: SocketOptions.StreamClientSocketOptions? = null
 ) : NIOSocketImpl<S>(channel, selector, pool = null, socketOptions = socketOptions),
     Socket {
     init {

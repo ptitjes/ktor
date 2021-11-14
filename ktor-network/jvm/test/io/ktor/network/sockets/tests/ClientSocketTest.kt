@@ -147,7 +147,7 @@ class ClientSocketTest {
 
     private fun client(block: suspend (Socket) -> Unit) {
         runBlocking {
-            aSocket(selector).tcp().connect(server!!.first.localSocketAddress.toSocketAddress()).use {
+            aSocket(selector).stream().connect(server!!.first.localSocketAddress.toSocketAddress()).use {
                 block(it)
             }
         }

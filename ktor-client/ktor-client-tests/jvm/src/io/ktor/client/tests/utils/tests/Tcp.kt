@@ -116,7 +116,7 @@ private suspend fun connectAndProcessTunnel(
     input: ByteReadChannel
 ) {
     SelectorManager(Dispatchers.IO).use { selector ->
-        aSocket(selector).tcp().connect(host, port).use { destination ->
+        aSocket(selector).stream().connect(host, port).use { destination ->
             coroutineScope {
                 launch {
                     destination.openReadChannel().copyAndClose(output)

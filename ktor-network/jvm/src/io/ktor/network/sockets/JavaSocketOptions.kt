@@ -28,7 +28,7 @@ internal fun SelectableChannel.assignOptions(options: SocketOptions) {
             options.receiveBufferSize.takeIf { it > 0 }?.let { setOption(StandardSocketOptions.SO_RCVBUF, it) }
             options.sendBufferSize.takeIf { it > 0 }?.let { setOption(StandardSocketOptions.SO_SNDBUF, it) }
         }
-        if (options is SocketOptions.TCPClientSocketOptions) {
+        if (options is SocketOptions.StreamClientSocketOptions) {
             options.lingerSeconds.takeIf { it >= 0 }?.let { setOption(StandardSocketOptions.SO_LINGER, it) }
             options.keepAlive?.let { setOption(StandardSocketOptions.SO_KEEPALIVE, it) }
             setOption(StandardSocketOptions.TCP_NODELAY, options.noDelay)
@@ -54,7 +54,7 @@ internal fun SelectableChannel.assignOptions(options: SocketOptions) {
             setOption(StandardSocketOptions.SO_REUSEPORT, true)
         }
 
-        if (options is SocketOptions.UDPSocketOptions) {
+        if (options is SocketOptions.DatagramSocketOptions) {
             setOption(StandardSocketOptions.SO_BROADCAST, options.broadcast)
         }
         if (options is SocketOptions.PeerSocketOptions) {

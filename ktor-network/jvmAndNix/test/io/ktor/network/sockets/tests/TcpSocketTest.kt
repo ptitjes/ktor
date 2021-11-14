@@ -15,14 +15,18 @@ class TcpSocketTest {
     @OptIn(InternalAPI::class)
     @Test
     fun testEcho() = testSockets { selector ->
-        val tcp = aSocket(selector).tcp()
-        val server = tcp.bind("localhost", 8000)
+        val server = aSocket(selector)
+            .stream()
+            .bind("localhost", 8000)
 
         val serverConnectionPromise = async {
             server.accept()
         }
 
-        val clientConnection = tcp.connect("localhost", 8000)
+        val clientConnection = aSocket(selector)
+            .stream()
+            .connect("localhost", 8000)
+
         val serverConnection = serverConnectionPromise.await()
 
         val clientOutput = clientConnection.openWriteChannel()
@@ -62,14 +66,18 @@ class TcpSocketTest {
 
         val socketPath = createTempFilePath("ktor-echo-test")
 
-        val tcp = aSocket(selector).tcp()
-        val server = tcp.bind(UnixSocketAddress(socketPath))
+        val server = aSocket(selector)
+            .stream()
+            .bind(UnixSocketAddress(socketPath))
 
         val serverConnectionPromise = async {
             server.accept()
         }
 
-        val clientConnection = tcp.connect(UnixSocketAddress(socketPath))
+        val clientConnection = aSocket(selector)
+            .stream()
+            .connect(UnixSocketAddress(socketPath))
+
         val serverConnection = serverConnectionPromise.await()
 
         val clientOutput = clientConnection.openWriteChannel()

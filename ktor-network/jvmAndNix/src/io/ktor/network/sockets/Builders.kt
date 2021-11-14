@@ -20,14 +20,34 @@ public class SocketBuilder internal constructor(
 ) : Configurable<SocketBuilder, SocketOptions> {
 
     /**
+     * Build a stream socket (TCP or unix domain stream socket).
+     */
+    public fun stream(): StreamSocketBuilder = StreamSocketBuilder(selector, options.peer())
+
+    /**
+     * Build a datagram socket (UDP or unix domain datagram socket).
+     */
+    public fun datagram(): DatagramSocketBuilder = DatagramSocketBuilder(selector, options.peer().datagram())
+
+    /**
      * Build TCP socket.
      */
-    public fun tcp(): TcpSocketBuilder = TcpSocketBuilder(selector, options.peer())
+    @Deprecated(
+        "tcp() has been replaced with stream().",
+        ReplaceWith("stream()"),
+        level = DeprecationLevel.WARNING
+    )
+    public fun tcp(): StreamSocketBuilder = StreamSocketBuilder(selector, options.peer())
 
     /**
      * Build UDP socket.
      */
-    public fun udp(): UDPSocketBuilder = UDPSocketBuilder(selector, options.peer().udp())
+    @Deprecated(
+        "udp() has been replaced with datagram().",
+        ReplaceWith("datagram()"),
+        level = DeprecationLevel.WARNING
+    )
+    public fun udp(): DatagramSocketBuilder = DatagramSocketBuilder(selector, options.peer().datagram())
 }
 
 /**
@@ -35,7 +55,7 @@ public class SocketBuilder internal constructor(
  */
 public fun <T : Configurable<T, *>> T.tcpNoDelay(): T {
     return configure {
-        if (this is SocketOptions.TCPClientSocketOptions) {
+        if (this is SocketOptions.StreamClientSocketOptions) {
             noDelay = true
         }
     }

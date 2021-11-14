@@ -106,7 +106,7 @@ class ServerSocketTest : CoroutineScope {
 
         val job = launch(Dispatchers.Default, start = CoroutineStart.LAZY) {
             try {
-                val server = aSocket(selector).tcp().bind(null)
+                val server = aSocket(selector).stream().bind()
                 this@ServerSocketTest.serverSocket.complete(server)
 
                 bound.countDown()

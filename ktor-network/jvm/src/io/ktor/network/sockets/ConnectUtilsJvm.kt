@@ -12,7 +12,7 @@ import java.nio.channels.spi.*
 internal actual suspend fun connect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
-    socketOptions: SocketOptions.TCPClientSocketOptions
+    socketOptions: SocketOptions.StreamClientSocketOptions
 ): Socket = selector.buildOrClose({ openSocketChannelFor(remoteAddress) }) {
     if (remoteAddress is InetSocketAddress) assignOptions(socketOptions)
     nonBlocking()
@@ -25,7 +25,7 @@ internal actual suspend fun connect(
 internal actual fun bind(
     selector: SelectorManager,
     localAddress: SocketAddress?,
-    socketOptions: SocketOptions.AcceptorOptions
+    socketOptions: SocketOptions.StreamServerSocketOptions
 ): ServerSocket = selector.buildOrClose({ openServerSocketChannelFor(localAddress) }) {
     if (localAddress is InetSocketAddress) assignOptions(socketOptions)
     nonBlocking()

@@ -6,15 +6,14 @@ package io.ktor.network.sockets
 
 import io.ktor.network.selector.*
 import io.ktor.network.util.*
-import io.ktor.util.network.*
 import kotlinx.cinterop.*
 import platform.posix.*
 
-internal actual fun UDPSocketBuilder.Companion.connectUDP(
+internal actual fun DatagramSocketBuilder.Companion.connectUDP(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
     localAddress: SocketAddress?,
-    options: SocketOptions.UDPSocketOptions
+    options: SocketOptions.DatagramSocketOptions
 ): ConnectedDatagramSocket {
     val address = localAddress?.address ?: getAnyLocalAddress()
     val descriptor = socket(address.family.convert(), SOCK_DGRAM, 0).check()
@@ -37,10 +36,10 @@ internal actual fun UDPSocketBuilder.Companion.connectUDP(
     )
 }
 
-internal actual fun UDPSocketBuilder.Companion.bindUDP(
+internal actual fun DatagramSocketBuilder.Companion.bindUDP(
     selector: SelectorManager,
     localAddress: SocketAddress?,
-    options: SocketOptions.UDPSocketOptions
+    options: SocketOptions.DatagramSocketOptions
 ): BoundDatagramSocket {
     val address = localAddress?.address ?: getAnyLocalAddress()
     val descriptor = socket(address.family.convert(), SOCK_DGRAM, 0).check()

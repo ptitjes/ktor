@@ -15,7 +15,7 @@ internal fun nonBlocking(descriptor: Int) {
 internal fun assignOptions(descriptor: Int, options: SocketOptions) {
     setSocketFlag(descriptor, SO_REUSEADDR, options.reuseAddress)
     setSocketFlag(descriptor, SO_REUSEPORT, options.reusePort)
-    if (options is SocketOptions.UDPSocketOptions) {
+    if (options is SocketOptions.DatagramSocketOptions) {
         setSocketFlag(descriptor, SO_BROADCAST, options.broadcast)
     }
 }

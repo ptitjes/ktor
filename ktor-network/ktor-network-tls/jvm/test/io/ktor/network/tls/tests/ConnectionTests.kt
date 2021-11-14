@@ -24,7 +24,6 @@ import org.junit.*
 import org.junit.Ignore
 import org.junit.Test
 import java.io.*
-import java.net.*
 import java.net.ServerSocket
 import java.security.*
 import java.security.cert.*
@@ -41,7 +40,7 @@ class ConnectionTests {
     fun tlsWithoutCloseTest(): Unit = runBlocking {
         val selectorManager = ActorSelectorManager(Dispatchers.IO)
         val socket = aSocket(selectorManager)
-            .tcp()
+            .stream()
             .connect("www.google.com", port = 443)
             .tls(Dispatchers.Default)
 
@@ -110,7 +109,7 @@ class ConnectionTests {
         keyStoreAndPassword: Pair<KeyStore, CharArray>? = null
     ) {
         runBlocking {
-            aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
+            aSocket(ActorSelectorManager(Dispatchers.IO)).stream()
                 .connect(InetSocketAddress("127.0.0.1", port))
                 .tls(Dispatchers.IO) {
                     keyStoreAndPassword?.let { addKeyStore(it.first, it.second) }

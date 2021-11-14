@@ -8,7 +8,6 @@ import io.ktor.network.selector.*
 import io.ktor.network.util.*
 import io.ktor.utils.io.*
 import io.ktor.utils.io.ByteChannel
-import io.ktor.utils.io.core.*
 import io.ktor.utils.io.pool.*
 import kotlinx.coroutines.*
 import java.nio.*
@@ -20,7 +19,7 @@ internal fun CoroutineScope.attachForWritingImpl(
     selectable: Selectable,
     selector: SelectorManager,
     pool: ObjectPool<ByteBuffer>,
-    socketOptions: SocketOptions.TCPClientSocketOptions? = null
+    socketOptions: SocketOptions.StreamClientSocketOptions? = null
 ): ReaderJob {
     val buffer = pool.borrow()
 
@@ -75,7 +74,7 @@ internal fun CoroutineScope.attachForWritingDirectImpl(
     nioChannel: WritableByteChannel,
     selectable: Selectable,
     selector: SelectorManager,
-    socketOptions: SocketOptions.TCPClientSocketOptions? = null
+    socketOptions: SocketOptions.StreamClientSocketOptions? = null
 ): ReaderJob = reader(Dispatchers.Unconfined + CoroutineName("cio-to-nio-writer"), channel) {
     selectable.interestOp(SelectInterest.WRITE, false)
     try {

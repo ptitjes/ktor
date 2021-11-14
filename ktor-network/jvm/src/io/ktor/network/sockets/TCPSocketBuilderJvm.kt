@@ -4,10 +4,8 @@
 
 package io.ktor.network.sockets
 
-import java.net.*
-
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-public suspend fun TcpSocketBuilder.connect(
+public suspend fun StreamSocketBuilder.connect(
     remoteAddress: SocketAddress,
-    configure: SocketOptions.TCPClientSocketOptions.() -> Unit = {}
+    configure: SocketOptions.StreamClientSocketOptions.() -> Unit = {}
 ): Socket = connect(remoteAddress, configure)

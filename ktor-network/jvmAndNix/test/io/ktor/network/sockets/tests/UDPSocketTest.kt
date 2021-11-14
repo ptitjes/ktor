@@ -24,7 +24,7 @@ class UDPSocketTest {
         var denied = false
         try {
             socket = aSocket(selector)
-                .udp()
+                .datagram()
                 .bind()
 
             socket.use {
@@ -53,7 +53,7 @@ class UDPSocketTest {
         val serverSocketCompletable = CompletableDeferred<BoundDatagramSocket>()
         val server = launch {
             aSocket(selector)
-                .udp()
+                .datagram()
                 .bind(InetSocketAddress("0.0.0.0", 0))
                 .use { socket ->
                     serverSocketCompletable.complete(socket)
@@ -65,7 +65,7 @@ class UDPSocketTest {
         val serverSocket = serverSocketCompletable.await()
 
         val clientSocket = aSocket(selector)
-            .udp()
+            .datagram()
             .bind {
                 broadcast = true
             }
@@ -93,7 +93,7 @@ class UDPSocketTest {
     @Test
     fun testClose(): Unit = testSockets { selector ->
         val socket = aSocket(selector)
-            .udp()
+            .datagram()
             .bind()
 
         socket.close()
@@ -106,7 +106,7 @@ class UDPSocketTest {
     @Test
     fun testInvokeOnClose() = testSockets { selector ->
         val socket: BoundDatagramSocket = aSocket(selector)
-            .udp()
+            .datagram()
             .bind()
 
         socket.outgoing.invokeOnClose {
@@ -131,7 +131,7 @@ class UDPSocketTest {
     @Test
     fun testOutgoingInvokeOnClose() = testSockets { selector ->
         val socket: BoundDatagramSocket = aSocket(selector)
-            .udp()
+            .datagram()
             .bind()
 
         socket.outgoing.invokeOnClose {
@@ -150,7 +150,7 @@ class UDPSocketTest {
     @Test
     fun testOutgoingInvokeOnCloseWithSocketClose() = testSockets { selector ->
         val socket: BoundDatagramSocket = aSocket(selector)
-            .udp()
+            .datagram()
             .bind()
 
         socket.outgoing.invokeOnClose {
@@ -169,7 +169,7 @@ class UDPSocketTest {
     @Test
     fun testOutgoingInvokeOnClosed() = testSockets { selector ->
         val socket: BoundDatagramSocket = aSocket(selector)
-            .udp()
+            .datagram()
             .bind()
 
         socket.outgoing.close(AssertionError())
@@ -188,7 +188,7 @@ class UDPSocketTest {
     @Test
     fun testSendReceive(): Unit = testSockets { selector ->
         aSocket(selector)
-            .udp()
+            .datagram()
             .bind(InetSocketAddress("127.0.0.1", 8000)) {
                 reuseAddress = true
             }

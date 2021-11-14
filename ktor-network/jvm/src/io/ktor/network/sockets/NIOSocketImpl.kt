@@ -18,7 +18,7 @@ internal abstract class NIOSocketImpl<out S>(
     override val channel: S,
     val selector: SelectorManager,
     val pool: ObjectPool<ByteBuffer>?,
-    private val socketOptions: SocketOptions.TCPClientSocketOptions? = null
+    private val socketOptions: SocketOptions.StreamClientSocketOptions? = null
 ) : ReadWriteSocket, SelectableBase(channel), CoroutineScope
     where S : java.nio.channels.ByteChannel, S : SelectableChannel {
 

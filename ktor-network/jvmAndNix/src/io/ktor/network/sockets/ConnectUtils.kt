@@ -9,11 +9,11 @@ import io.ktor.network.selector.*
 internal expect suspend fun connect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
-    socketOptions: SocketOptions.TCPClientSocketOptions
+    socketOptions: SocketOptions.StreamClientSocketOptions
 ): Socket
 
 internal expect fun bind(
     selector: SelectorManager,
     localAddress: SocketAddress?,
-    socketOptions: SocketOptions.AcceptorOptions
+    socketOptions: SocketOptions.StreamServerSocketOptions
 ): ServerSocket

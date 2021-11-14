@@ -38,7 +38,7 @@ actual abstract class EngineTestBase<TEngine : ApplicationEngine, TConfiguration
     protected actual annotation class Http2Only actual constructor()
 
     protected actual var port: Int by shared(
-        aSocket(TEST_SELECTOR_MANAGER).tcp().bind().use {
+        aSocket(TEST_SELECTOR_MANAGER).stream().bind().use {
             val inetAddress = it.localAddress as? InetSocketAddress ?: error("Expected inet socket address")
             inetAddress.port
         }

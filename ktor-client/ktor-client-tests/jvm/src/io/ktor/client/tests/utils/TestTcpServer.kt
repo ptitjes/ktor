@@ -16,7 +16,7 @@ internal class TestTcpServer(val port: Int, handler: suspend (Socket) -> Unit) :
     override val coroutineContext: CoroutineContext
 
     init {
-        val server = aSocket(selector).tcp().bind(port = port)
+        val server = aSocket(selector).stream().bind(port = port)
 
         coroutineContext = GlobalScope.launch {
             while (isActive) {

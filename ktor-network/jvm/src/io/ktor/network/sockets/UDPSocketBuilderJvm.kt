@@ -6,11 +6,11 @@ package io.ktor.network.sockets
 
 import io.ktor.network.selector.*
 
-internal actual fun UDPSocketBuilder.Companion.connectUDP(
+internal actual fun DatagramSocketBuilder.Companion.connectUDP(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
     localAddress: SocketAddress?,
-    options: SocketOptions.UDPSocketOptions
+    options: SocketOptions.DatagramSocketOptions
 ): ConnectedDatagramSocket = selector.buildOrClose({ openDatagramChannel() }) {
     assignOptions(options)
     nonBlocking()
@@ -21,10 +21,10 @@ internal actual fun UDPSocketBuilder.Companion.connectUDP(
     return DatagramSocketImpl(this, selector)
 }
 
-internal actual fun UDPSocketBuilder.Companion.bindUDP(
+internal actual fun DatagramSocketBuilder.Companion.bindUDP(
     selector: SelectorManager,
     localAddress: SocketAddress?,
-    options: SocketOptions.UDPSocketOptions
+    options: SocketOptions.DatagramSocketOptions
 ): BoundDatagramSocket = selector.buildOrClose({ openDatagramChannel() }) {
     assignOptions(options)
     nonBlocking()

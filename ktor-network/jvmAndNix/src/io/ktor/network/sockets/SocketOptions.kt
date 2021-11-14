@@ -31,8 +31,8 @@ public sealed class SocketOptions(
         }
     }
 
-    internal fun acceptor(): AcceptorOptions {
-        return AcceptorOptions(HashMap(customOptions)).apply {
+    internal fun streamServer(): StreamServerSocketOptions {
+        return StreamServerSocketOptions(HashMap(customOptions)).apply {
             copyCommon(this@SocketOptions)
         }
     }
@@ -61,9 +61,9 @@ public sealed class SocketOptions(
     public var reusePort: Boolean = false
 
     /**
-     * TCP server socket options
+     * Stream server socket options
      */
-    public class AcceptorOptions internal constructor(
+    public class StreamServerSocketOptions internal constructor(
         customOptions: MutableMap<Any, Any?>
     ) : SocketOptions(customOptions) {
         /**
@@ -76,15 +76,15 @@ public sealed class SocketOptions(
          */
         public var backlogSize: Int = 511
 
-        override fun copy(): AcceptorOptions {
-            return AcceptorOptions(HashMap(customOptions)).apply {
-                copyCommon(this@AcceptorOptions)
+        override fun copy(): StreamServerSocketOptions {
+            return StreamServerSocketOptions(HashMap(customOptions)).apply {
+                copyCommon(this@StreamServerSocketOptions)
             }
         }
     }
 
     /**
-     * Represents TCP client or UDP socket options
+     * Represents stream client or datagram socket options
      */
     public open class PeerSocketOptions internal constructor(
         customOptions: MutableMap<Any, Any?>
@@ -115,14 +115,14 @@ public sealed class SocketOptions(
             }
         }
 
-        internal fun tcp(): TCPClientSocketOptions {
-            return TCPClientSocketOptions(HashMap(customOptions)).apply {
+        internal fun streamClient(): StreamClientSocketOptions {
+            return StreamClientSocketOptions(HashMap(customOptions)).apply {
                 copyCommon(this@PeerSocketOptions)
             }
         }
 
-        internal fun udp(): UDPSocketOptions {
-            return UDPSocketOptions(HashMap(customOptions)).apply {
+        internal fun datagram(): DatagramSocketOptions {
+            return DatagramSocketOptions(HashMap(customOptions)).apply {
                 copyCommon(this@PeerSocketOptions)
             }
         }
@@ -131,7 +131,7 @@ public sealed class SocketOptions(
     /**
      * Represents UDP socket options
      */
-    public class UDPSocketOptions internal constructor(
+    public class DatagramSocketOptions internal constructor(
         customOptions: MutableMap<Any, Any?>
     ) : PeerSocketOptions(customOptions) {
 
@@ -142,22 +142,22 @@ public sealed class SocketOptions(
 
         override fun copyCommon(from: SocketOptions) {
             super.copyCommon(from)
-            if (from is UDPSocketOptions) {
+            if (from is DatagramSocketOptions) {
                 broadcast = from.broadcast
             }
         }
 
-        override fun copy(): UDPSocketOptions {
-            return UDPSocketOptions(HashMap(customOptions)).apply {
-                copyCommon(this@UDPSocketOptions)
+        override fun copy(): DatagramSocketOptions {
+            return DatagramSocketOptions(HashMap(customOptions)).apply {
+                copyCommon(this@DatagramSocketOptions)
             }
         }
     }
 
     /**
-     * Represents TCP client socket options
+     * Represents stream client socket options
      */
-    public class TCPClientSocketOptions internal constructor(
+    public class StreamClientSocketOptions internal constructor(
         customOptions: MutableMap<Any, Any?>
     ) : PeerSocketOptions(customOptions) {
         /**
@@ -184,16 +184,16 @@ public sealed class SocketOptions(
         @Suppress("KDocMissingDocumentation")
         override fun copyCommon(from: SocketOptions) {
             super.copyCommon(from)
-            if (from is TCPClientSocketOptions) {
+            if (from is StreamClientSocketOptions) {
                 noDelay = from.noDelay
                 lingerSeconds = from.lingerSeconds
                 keepAlive = from.keepAlive
             }
         }
 
-        override fun copy(): TCPClientSocketOptions {
-            return TCPClientSocketOptions(HashMap(customOptions)).apply {
-                copyCommon(this@TCPClientSocketOptions)
+        override fun copy(): StreamClientSocketOptions {
+            return StreamClientSocketOptions(HashMap(customOptions)).apply {
+                copyCommon(this@StreamClientSocketOptions)
             }
         }
     }

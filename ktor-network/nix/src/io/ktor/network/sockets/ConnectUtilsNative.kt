@@ -14,7 +14,7 @@ private const val DEFAULT_BACKLOG_SIZE = 50
 internal actual suspend fun connect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
-    socketOptions: SocketOptions.TCPClientSocketOptions
+    socketOptions: SocketOptions.StreamClientSocketOptions
 ): Socket = memScoped {
     for (remote in remoteAddress.resolve()) {
         try {
@@ -45,7 +45,7 @@ internal actual suspend fun connect(
 internal actual fun bind(
     selector: SelectorManager,
     localAddress: SocketAddress?,
-    socketOptions: SocketOptions.AcceptorOptions
+    socketOptions: SocketOptions.StreamServerSocketOptions
 ): ServerSocket = memScoped {
     val address = localAddress?.address ?: getAnyLocalAddress()
     val descriptor = socket(address.family.convert(), SOCK_STREAM, 0).check()

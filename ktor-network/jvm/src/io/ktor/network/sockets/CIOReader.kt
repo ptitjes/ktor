@@ -8,8 +8,6 @@ import io.ktor.network.selector.*
 import io.ktor.network.util.*
 import io.ktor.utils.io.*
 import io.ktor.utils.io.ByteChannel
-import io.ktor.utils.io.core.*
-import io.ktor.utils.io.nio.*
 import io.ktor.utils.io.pool.*
 import kotlinx.coroutines.*
 import java.nio.*
@@ -21,7 +19,7 @@ internal fun CoroutineScope.attachForReadingImpl(
     selectable: Selectable,
     selector: SelectorManager,
     pool: ObjectPool<ByteBuffer>,
-    socketOptions: SocketOptions.TCPClientSocketOptions? = null
+    socketOptions: SocketOptions.StreamClientSocketOptions? = null
 ): WriterJob {
     val buffer = pool.borrow()
     return writer(Dispatchers.Unconfined + CoroutineName("cio-from-nio-reader"), channel) {
@@ -76,7 +74,7 @@ internal fun CoroutineScope.attachForReadingDirectImpl(
     nioChannel: ReadableByteChannel,
     selectable: Selectable,
     selector: SelectorManager,
-    socketOptions: SocketOptions.TCPClientSocketOptions? = null
+    socketOptions: SocketOptions.StreamClientSocketOptions? = null
 ): WriterJob = writer(Dispatchers.Unconfined + CoroutineName("cio-from-nio-reader"), channel) {
     try {
         selectable.interestOp(SelectInterest.READ, false)
